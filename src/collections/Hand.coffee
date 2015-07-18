@@ -4,7 +4,38 @@ class window.Hand extends Backbone.Collection
   initialize: (array, @deck, @isDealer) ->
 
   hit: ->
-    @add(@deck.pop())
+    card = @deck.pop()
+    @add(card)
+    currentScore = @scores()
+    if currentScore[0] > 21 
+      @trigger 'loss' , @
+    card
+
+  stand: -> 
+    #Trigger an event on AppView that calls bestScore on both hands and determines the winner
+    @trigger 'gameover' 
+    
+
+  bestScore: -> 
+    if @isDealer && !@models[0].attributes.revealed
+      @models[0].flip();
+
+    currentScore = @scores()
+    if @isDealer
+      if currentScore[0] >= 17 then return currentScore[0]
+      if currentScore[1] >= 18 then return currentScore[1]
+      @hit()
+      @bestScore()
+    else 
+      return if (currentScore[1] < 21) then  currentScore[1] else  currentScore[0]
+
+
+
+  #return the maximum score possible with current cards
+  #If @isDealer then keep hitting till max score >17
+  #if dealer loses display "Dealer loses"
+  #return score
+
 
   hasAce: -> @reduce (memo, card) ->
     memo or card.get('value') is 1
