@@ -17,7 +17,8 @@ class window.Hand extends Backbone.Collection
     
 
   bestScore: -> 
-    if @isDealer && !@models[0].attributes.revealed
+    console.log(@)
+    if @isDealer && !@models[0].get('revealed')
       @models[0].flip();
 
     currentScore = @scores()

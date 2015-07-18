@@ -4,7 +4,7 @@
  new AppView(model: new App()).$el.appendTo 'body'
 
 
- # App coffee
+ # App model
  class window.App extends Backbone.Model
   initialize: ->
     @set 'deck', deck = new Deck()
@@ -12,7 +12,7 @@
     @set 'dealerHand', deck.dealDealer()
 
 
-# Deck coffee
+# Deck collection
 initialize: ->
   @add _([0...52]).shuffle().map (card) ->
     new Card
